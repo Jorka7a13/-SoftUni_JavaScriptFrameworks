@@ -1,0 +1,100 @@
+<h1>Videos</h1>
+<section>
+	<h3>Filter By</h3>
+	<label for="categoryFilter">Category: </label>
+	<select id="categoryFilter" ng-options="category for category in allCategories" ng-model="categoryFilter" ng-change="applyCategoryFilter()">
+	</select>
+
+	<label for="dateFilter">Date: </label>
+	<select id="dateFilter" ng-options="date for date in allDates" ng-model="dateFilter" ng-change="applyDateFilter()">
+	</select>
+
+	<label for="haveSubtitles">Having Subtitles: </label>
+	<select id="haveSubtitles" ng-model="haveSubtitlesFilter" ng-change="applyHaveSubtitlesFilter()">
+		<option value="true">Has Subtitles</option>
+		<option value="false">Doesn't have subtitles</option>
+	</select>
+</section>
+<section>
+	<h3>Sort By</h3>
+	<label for="sorter">Title: </label>
+	<select id="sorter" ng-model="sortBy" ng-change="sortVideos()">
+		<option value="title">Title</option>
+		<option value="length">Length</option>
+		<option value="date">Date</option>
+	</select>
+</section>
+<section class="video" ng-repeat="video in videos" ng-if="videos[0]" >
+	<h2 ng-if="video.title">{{video.title}}</h2>
+	<img ng-src="{{video.pictureUrl}}" alt="Cover photo" ng-if="video.pictureUrl"/>
+	<section ng-if="video.length"><span>Length: {{video.length}}</span></section>
+	<section ng-if="video.subscribers"><span>Subscribers: {{video.subscribers}}</span></section>
+	<section ng-if="video.date"><span>Date: {{video.date | date:'MMMM dd, yyyy'}}</span></section>
+	<section><span>{{video.haveSubtitles ? "Has subtitles" : "Doesn't have subtitles"}}</span></section>
+	<section class="commentSection" ng-if="video.comments[0]">
+		<h3>Comments:</h3>
+		<section class="comment" ng-repeat="comment in video.comments">
+			<span><strong>{{comment.username}}:</strong> {{comment.content}} - {{comment.date}}</span> <br />
+			<span>Likes: {{comment.likes}}</span> <br />
+			<a href="{{comment.websiteUrl}}">{{comment.websiteUrl}}</a> <br />
+		</section>
+	</section>
+	<!-- It OVERWRITES COMMENTS!!! FIX IT!! Maybe set it on a different $scope property, and just add it when pushing to the factory???-->
+	<section class="addComment"> 
+		<h3>Add Comment:</h3>
+		<label for="username">User Name: </label>
+		<input type="text" id="username" ng-model="video.comments[video.id].username"> <br />
+		<label for="websiteUrl">Website: </label>
+		<input type="text" id="websiteUrl" ng-model="video.comments[video.id].websiteUrl"> <br />
+		<label for="comment">Comment: </label>
+		<textarea id="comment" ng-model="video.comments[video.id].content"></textarea> <br />
+		<button type="button" ng-click="addComment(video.comments[video.id], video.id)">Add Comment</button>
+	</section>
+	<!-- <section class="addComment"> 
+		<h3>Add Comment:</h3>
+		<label for="username">User Name: </label>
+		<input type="text" id="username" ng-model="comment.username"> <br />
+		<label for="websiteUrl">Website: </label>
+		<input type="text" id="websiteUrl" ng-model="comment.websiteUrl"> <br />
+		<label for="comment">Comment: </label>
+		<textarea id="comment" ng-model="comment.content"></textarea> <br />
+		<button type="button" ng-click="addComment(video.id)">Add Comment</button>
+	</section> -->
+</section>
+<section ng-if="videos[0] == undefined">
+	<h2>There are no videos added yet!</h2>
+</section>
+
+<!-- // Video Example
+// {
+// 	'title': 'Course introduction',
+// 	'pictureUrl': 'http://ichef-1.bbci.co.uk/news/976/media/images/83351000/jpg/_83351965_explorer273lincolnshirewoldssouthpicturebynicholassilkstone.jpg',
+// 	'length': '3:32',
+// 	'category': 'IT',
+// 	'subscribers': 3,
+// 	'date': new Date(2014, 12, 15),
+// 	'haveSubtitles': false,
+// 	'comments': [
+// 		{
+// 			'username': 'Pesho Peshev',
+// 			'content': 'Congratulations Nakov',
+// 			'date': new Date(2014, 12, 15, 12, 30, 0),
+// 			'likes': 0,
+// 			'websiteUrl': 'http://pesho.com/'
+// 		},
+// 		{
+// 			'username': 'Gosho Goshov',
+// 			'content': 'Opredeleno lektora znae za kakvo govori. Nishto che az ne znam.',
+// 			'date': new Date(2015, 1, 23, 21, 48, 12),
+// 			'likes': 13,
+// 			'websiteUrl': 'http://goshetoepich.com/'
+// 		},
+// 		{
+// 			'username': 'Niki Ot Klokotnica',
+// 			'content': 'Abe kak se kazvashe noviat film s Leonardo DiCaprio? Toq s mechkata?',
+// 			'date': new Date(2016, 2, 7, 18, 35, 0),
+// 			'likes': 5,
+// 			'websiteUrl': 'http://azsamnikibgcomorg.co.uk/'
+// 		}
+// 	]
+// } -->
